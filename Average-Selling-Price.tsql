@@ -1,0 +1,20 @@
+/* Write your T-SQL query statement below */
+
+-- select product_id, sum(units)*price as totalcost from (select *, price*units as totalcost from (select p.product_id, p.start_date, p.end_date, p.price, u.purchase_date, u.units from prices as p inner join unitssold as u on p.product_id = u.product_id ) as c) as z where purchase_date between start_date and end_date group by product_id
+
+-- select product_id, round(sum(cast(totalcost as float))/sum(units), 2) as average_price from(select product_id, units, totalcost from (select *, price*units as totalcost from (select p.product_id, p.start_date, p.end_date, p.price, u.purchase_date, u.units from prices as p inner join unitssold as u on p.product_id = u.product_id ) as c) as z where purchase_date between start_date and end_date) as t group by product_id
+
+select 
+    p.product_id,
+    round(
+        case 
+            when sum(coalesce(u.units,0)) = 0 
+            then 0 
+            else cast(sum(coalesce(u.units,0) * p.price) as float) / sum(coalesce(u.units,0))
+        end, 
+    2) as average_price
+from prices p
+left join unitssold u
+    on p.product_id = u.product_id
+   and u.purchase_date between p.start_date and p.end_date
+group by p.product_id;
