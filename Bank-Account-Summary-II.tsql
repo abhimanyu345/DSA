@@ -1,0 +1,4 @@
+/* Write your T-SQL query statement below */
+
+select u.name, t.balance from (select account, balance from (select account, sum(amount) as balance from transactions group by account) as z where balance > 10000) as t inner join users as u on t.account = u.account
+
