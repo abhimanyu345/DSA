@@ -1,0 +1,2 @@
+/* Write your T-SQL query statement below */
+select t.user_id, concat(UPPER(t.name__), lower(t.name_)) as name from (select user_id, left(name, 1) as name__, right(name, len(name)-1) as name_ from users) as t order by user_id asc
