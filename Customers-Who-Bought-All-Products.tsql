@@ -1,0 +1,5 @@
+/* Write your T-SQL query statement below */
+
+select customer_id from (select * from (select customer_id, count(distinct product_key) as total from customer group by customer_id) as z
+cross join 
+(select count(distinct product_key) as total_product from product) as t) as f where total = total_product 
