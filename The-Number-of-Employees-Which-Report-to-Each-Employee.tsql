@@ -1,0 +1,8 @@
+/* Write your T-SQL query statement below */
+
+select e.employee_id, e.name, z.reports_count, z.average_age from(select * from(select reports_to , count(coalesce(reports_to, 0)) as reports_count, 
+case  
+when avg(cast(age as float))-avg(age)>=0.5 then ceiling(avg(cast(age as float)))
+when avg(cast(age as float))-avg(age)<0.5 then floor(avg(cast(age as float)))
+end
+as average_age from (select * from employees where employee_id != reports_to) as t group by reports_to) as z where reports_to is not null) as z inner join employees as e on z.reports_to = e.employee_id
