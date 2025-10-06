@@ -1,0 +1,8 @@
+/* Write your T-SQL query statement below */
+
+select id, case 
+when p_id is null then 'Root'
+when parent='yes' then 'Inner'
+else 'Leaf'
+end type from
+(select t.id, t.p_id, z.parent from tree as t left join (select distinct p_id, 'yes' as parent from tree) as z on t.id = z.p_id ) as m
