@@ -1,0 +1,5 @@
+/* Write your T-SQL query statement below */
+
+select contest_id, round(cast(count as float)/user_count*100, 2) as percentage from(select z.contest_id, z.count, u.user_count from (select contest_id, count(user_id) as count from register group by contest_id) as z
+cross join
+(select count(user_id) as user_count from users) as u) as t order by percentage desc, contest_id asc
