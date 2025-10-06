@@ -1,0 +1,8 @@
+/* Write your T-SQL query statement below */
+
+select id, num from (select * , rank() over(order by num desc) rank from(
+select id, count(id) as num from
+(select requester_id as id from requestaccepted
+union all
+select accepter_id from requestaccepted) as z
+group by id) as t) as m where rank = 1
