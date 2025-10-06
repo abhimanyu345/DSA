@@ -1,0 +1,8 @@
+/* Write your T-SQL query statement below */
+
+select round(cast(sum(immediate) as float)/count(immediate)*100, 2) as immediate_percentage from(select *,
+case
+when order_date = customer_pref_delivery_date then 1
+else 0
+end immediate from
+(select * from(select *, row_number() over(partition by customer_id order by order_date) as rank from delivery) as z where rank = 1) as t) as m
