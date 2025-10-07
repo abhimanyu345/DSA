@@ -1,0 +1,11 @@
+/* Write your T-SQL query statement below */
+
+select round(sum(tiv_2016), 2) as tiv_2016 from(select pid, tiv_2016, sum(flag) as flag from(select b.pid, b.tiv_2016,
+case 
+when b.latlon = c.latlon then 1
+else 0
+end flag
+
+ from(select *, concat(cast(lat as varchar), ',', cast(lon as varchar)) as latlon from (select i.* from(select distinct pid1 from(select m.pid as pid1, n.pid as pid2, m.in6 as in6_1, n.in6 as in6_2, m.latlon as latlon1, n.latlon as latlon2 from(select pid, sum(tiv_2015) in5, sum(tiv_2016) in6, z.latlon from(select pid, tiv_2015, tiv_2016, concat(cast(lat as VARCHAR), ',', cast(lon as VARCHAR)) as latlon from insurance) as z group by pid, latlon) as m cross join (select pid, sum(tiv_2015) in5, sum(tiv_2016) in6, z.latlon from(select pid, tiv_2015, tiv_2016, concat(cast(lat as VARCHAR), ',', cast(lon as VARCHAR)) as latlon from insurance) as z group by pid, latlon) as n where m.pid != n.pid and m.in5 = n.in5) as l) as k inner join insurance as i on i.pid = k.pid1) as a) as b cross join (
+    select *, concat(cast(lat as varchar), ',', cast(lon as varchar)) as latlon from insurance
+) as c where b.pid != c.pid) as d group by tiv_2016, pid having sum(flag)=0) as e
