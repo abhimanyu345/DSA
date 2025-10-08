@@ -1,0 +1,3 @@
+/* Write your T-SQL query statement below */
+
+select Department, Employee, Salary from (select z.d_name as Department, z.name as Employee, z.salary as Salary, rank() over(partition by z.d_name order by salary desc) as rank from(select e.*, d.id as id_d, d.name as d_name from employee as e cross join department as d where e.departmentid = d.id) as z) as t where rank = 1
