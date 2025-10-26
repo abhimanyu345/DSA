@@ -1,0 +1,3 @@
+/* Write your T-SQL query statement below */
+
+select distinct num as ConsecutiveNums from(select *, lag(num, 2, null) over(order by id) as lag_2 , lag(num, 1, null) over(order by id) as lag_1 from logs) as t where num = lag_2 and lag_2 = lag_1
