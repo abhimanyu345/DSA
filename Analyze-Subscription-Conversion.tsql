@@ -1,0 +1,20 @@
+/* Write your T-SQL query statement below */
+
+select user_id, sum(trial_avg_duration) as trial_avg_duration,
+sum(paid_avg_duration) as paid_avg_duration from
+(select user_id,
+case activity_type
+when 'free_trial' then duration
+else 0
+end as trial_avg_duration,
+case activity_type
+when 'paid' then duration
+else 0
+end as paid_avg_duration from(
+select * from 
+(select *, count(user_id) over(partition by user_id) as count from (select * from(
+select user_id, activity_type, round(avg(cast(activity_duration as float)), 2) as duration 
+from useractivity group by user_id, activity_type) as t
+where t.activity_type != 'cancelled') as b) as a
+where count = 2) as c) as d
+group by user_id
